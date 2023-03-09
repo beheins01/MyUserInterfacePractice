@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>What Have I Seen??</title>
+</head>
+<body>
+    <h1>Here are the Animes I have Seen!</h1>
+    <ul id="editable-list" contenteditable>
+    </ul>
+
+    <input type="text" id="new-item-input">
+    <button onclick="addItem()">Add Item</button>
+    <button onclick="deleteItem()">Delete Item</button>
+    <button id="Homepage"><a href="index.html">Home</a></button>
+
+    <script>
+        // Load items from local storage on page load
+        var list = document.getElementById("editable-list");
+        for (var i = 0; i < localStorage.length; i++) {
+            var key = localStorage.key(i);
+            if (key.indexOf("item-") === 0) {
+                var item = document.createElement("li");
+                item.innerText = localStorage.getItem(key);
+                list.appendChild(item);
+            }
+        }
+
+        function addItem() {
+            var itemText = document.getElementById("new-item-input").value;
+            if (itemText) {
+                var item = document.createElement("li");
+                item.innerText = itemText;
+                list.appendChild(item);
+                // Save the new item to local storage
+                localStorage.setItem("item-" + localStorage.length, itemText);
+                document.getElementById("new-item-input").value = "";
+            }
+        }
+
+        function deleteItem() {
+            var items = list.getElementsByTagName("li");
+            if (items.length > 0) {
+                // Remove the last item from the list
+                list.removeChild(items[items.length - 1]);
+                // Remove the corresponding item from local storage
+                localStorage.removeItem("item-" + (localStorage.length - 1));
+            }
+        }
+    </script>
+</body>
+</html>
